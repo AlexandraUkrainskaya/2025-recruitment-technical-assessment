@@ -1,0 +1,10 @@
+{
+    "type": "recipe",
+    "name": "Skibidi",
+    "requiredItems": [
+        {
+            "name": "Bruh",
+            "quantity": 1
+        }
+    ]
+}

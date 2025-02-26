@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "build": "tsc",
+    "test": "jest -t",
+    "test_part1": "jest -t \"Task 1\"",
+    "test_part2": "jest -t \"Task 2\"",
+    "test_part3": "jest -t \"Task 3\""
+
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.1",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.3"
+  }
+}

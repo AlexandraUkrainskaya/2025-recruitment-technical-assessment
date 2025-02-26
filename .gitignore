@@ -1,0 +1,6 @@
+# ignore some common stuff
+**/node_modules
+**/.env
+**/.venv
+venv/
+.DS_Store

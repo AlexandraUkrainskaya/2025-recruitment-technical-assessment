@@ -1,0 +1,10 @@
+{
+    "type": "recipe",
+    "name": "Meatball",
+    "requiredItems": [
+        {
+            "name": "Beef",
+            "quantity": 1
+        }
+    ]
+}

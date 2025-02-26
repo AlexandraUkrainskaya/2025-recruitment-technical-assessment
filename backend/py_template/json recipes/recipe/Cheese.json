@@ -1,0 +1,10 @@
+{
+    "type": "recipe",
+    "name": "Cheese",
+    "requiredItems": [
+        {
+            "name": "Not Real",
+            "quantity": 1
+        }
+    ]
+}
