@@ -186,7 +186,7 @@ describe("Task 3", () => {
       const bruh = {
               type: "recipe",
                name: "Bruh2",
-        requiredItems: [{ name: "Banana2", quantity: 1 }],
+        requiredItems: [{ name: "Banana2", quantity: 2 }],
       };
       const resp2 = await postEntry(bruh);
       expect(resp2.status).toBe(200);
@@ -202,8 +202,8 @@ describe("Task 3", () => {
       const resp4 = await getTask3("Skibidi2");
       expect(resp4.body).toStrictEqual({
           "name": "Skibidi2",
-          "cookTime": 1,
-          "ingredients": [{"name": "Banana2", "quantity": 1}]
+          "cookTime": 2,
+          "ingredients": [{"name": "Banana2", "quantity": 2}]
           });
     });
   });

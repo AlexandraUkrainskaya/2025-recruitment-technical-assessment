@@ -119,7 +119,7 @@ def summary():
 			elif len(recipes_suitable) != 0:
 				recipes_recursive.append(recipes_suitable[0])
 			else:
-				cook_time += ingredients_suitable[0].get("cookTime")
+				cook_time += ingredients_suitable[0].get("cookTime") * el.get("quantity")
 				to_return.append({"name": el.get("name"), "quantity": el.get("quantity")})
 	return jsonify({"name": recipe_name, "cookTime": cook_time, "ingredients": to_return}), 200
 
