@@ -47,7 +47,7 @@ def parse():
 	return jsonify({'msg': parsed_name}), 200
 
 # [TASK 1] ====================================================================
-# Takes in a recipeName and returns it in a form that 
+# Takes in a recipeName and returns it in a form that
 def parse_handwriting(recipeName: str) -> Union[str | None]:
 	# TODO: implement me
 	newRecipeName = recipeName.replace("-", " ").replace("_", " ")
@@ -95,32 +95,48 @@ def create_entry():
 
 # [TASK 3] ====================================================================
 # Endpoint that returns a summary of a recipe that corresponds to a query name
+
+def get_ingredients(recipe_name, multiplier=1, result=None):
+	global recipes, ingredients	#get the data
+	if result is None:
+		result = {}
+
+	recipe_names = [el.get('name') for el in recipes]
+	if recipe_name not in recipe_names:
+		return -1
+	recipe = [el for el in recipes if el.get("name") == recipe_name][0]
+
+	for ingredient in recipe.get("requiredItems"):
+		if ingredient["name"] in recipe_names:
+			ingredient_object = [el for el in recipes if el.get('name') == ingredient['name']][0]
+			#if "requiredItems" in ingredient_object.keys():
+			sub_result = get_ingredients(ingredient['name'], multiplier * ingredient['quantity'], result)
+			if sub_result == -1:
+				return -1
+		else:
+			ingredient_names = [el.get('name') for el in ingredients]
+			if ingredient['name'] not in ingredient_names:
+				return -1
+			if ingredient['name'] in result:
+				result[ingredient['name']] += ingredient['quantity'] * multiplier
+			else:
+				result[ingredient['name']] = ingredient['quantity'] * multiplier
+	return result
+
 @app.route('/summary', methods=['GET'])
 def summary():
 	global recipes, ingredients
 	# TODO: implement me
 	recipe_name = request.args.get('name')
-	recipes_recursive = []
-	to_return = []
-	recipe = [el for el in recipes if el.get("name") == recipe_name]
-	if len(recipe) == 0:
-		return "no such recipe", 400
-	recipe = recipe[0]
-	recipes_recursive.append(recipe)
 	cook_time = 0
-
-	while len(recipes_recursive) > 0:
-		current_recipe = recipes_recursive.pop(0)
-		for el in current_recipe.get("requiredItems"):
-			ingredients_suitable = [il for il in ingredients if il['name'] == el.get("name")]
-			recipes_suitable = [il for il in recipes if il['name'] == el.get("name")]
-			if len(ingredients_suitable) == 0 and len(recipes_suitable) == 0:
-				return "ingredient does not exist", 400
-			elif len(recipes_suitable) != 0:
-				recipes_recursive.append(recipes_suitable[0])
-			else:
-				cook_time += ingredients_suitable[0].get("cookTime") * el.get("quantity")
-				to_return.append({"name": el.get("name"), "quantity": el.get("quantity")})
+	ingredient_list = get_ingredients(recipe_name, 1, None)
+	if ingredient_list == -1:
+		return "", 400
+	to_return = []
+	for ing, quant in ingredient_list.items():
+		corresponding_object = [el for el in ingredients if el.get('name') == ing][0]
+		cook_time += corresponding_object.get('cookTime') * quant
+		to_return.append({'name': ing, 'quantity': quant})
 	return jsonify({"name": recipe_name, "cookTime": cook_time, "ingredients": to_return}), 200
 
 
