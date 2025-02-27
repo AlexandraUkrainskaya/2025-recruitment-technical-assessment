@@ -172,6 +172,7 @@ describe("Task 3", () => {
 
       const resp3 = await getTask3("Skibidi");
       expect(resp3.status).toBe(200);
+      expect(resp3.body).toStrictEqual({'name': 'Skibidi', 'cookTime': 2, 'ingredients': [{'name':'Bruh', 'quantity': 1}]})
       })
 
       ///////////////////////////////////
@@ -179,7 +180,7 @@ describe("Task 3", () => {
           const meatball = {
               type: "recipe",
                name: "Skibidi2",
-        requiredItems: [{ name: "Bruh2", quantity: 1 }],
+        requiredItems: [{ name: "Bruh2", quantity: 2 }],
       };
       const resp1 = await postEntry(meatball);
       expect(resp1.status).toBe(200);
@@ -200,11 +201,56 @@ describe("Task 3", () => {
       expect(resp3.status).toBe(200);
 
       const resp4 = await getTask3("Skibidi2");
+      expect(resp4.status).toBe(200)
       expect(resp4.body).toStrictEqual({
           "name": "Skibidi2",
-          "cookTime": 2,
-          "ingredients": [{"name": "Banana2", "quantity": 2}]
+          "cookTime": 4,
+          "ingredients": [{"name": "Banana2", "quantity": 4}]
           });
     });
+
+    it("Test return 3", async() => {
+        const meatball = {
+              type: "recipe",
+               name: "Meat Ball 2",
+        requiredItems: [{ name: "Sauce 1", quantity: 2 }, {name: 'Sauce 2', quantity: 1}],
+      };
+      const resp1 = await postEntry(meatball);
+      expect(resp1.status).toBe(200);
+
+      const tomato_sauce = {
+              type: "recipe",
+               name: "Sauce 1",
+        requiredItems: [{name: 'Tomato', quantity: 2}],
+      };
+      const resp2 = await postEntry(tomato_sauce);
+      expect(resp2.status).toBe(200);
+
+    const tomato_sauce2 = {
+              type: "recipe",
+               name: "Sauce 2",
+        requiredItems: [{name: 'Tomato', quantity: 3}],
+      };
+      const resp3 = await postEntry(tomato_sauce2);
+      expect(resp3.status).toBe(200);
+
+    const tomato = {
+              type: "ingredient",
+               name: "Tomato",
+               cookTime: 1,
+      };
+      const resp4 = await postEntry(tomato);
+      expect(resp4.status).toBe(200);
+
+    const resp5 = await getTask3("Meat Ball 2");
+      expect(resp5.status).toBe(200)
+      expect(resp5.body).toStrictEqual({
+          "name": "Meat Ball 2",
+          "cookTime": 7,
+          "ingredients": [{"name": "Tomato", "quantity": 7}]
+          });
+
+    })
+
   });
 });
